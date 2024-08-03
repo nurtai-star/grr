@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ object.title }}</h2>
+<p>{{ object.created_at }} {{ object.author.username }}</p>
+<p>{{ object.content }}</p>
+
+<h3>Комментарии</h3>
+<ul>
+    {% for comment in comments %}
+        <li>
+            <p>{{ comment.created_at }} {{ comment.author.username }}</p>
+            <p>{{ comment.content }}</p>
+        </li>
+    {% endfor %}
+</ul>
+<div>
+    {% if is_paginated %}
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; первая</a>
+                <a href="?page={{ page_obj.previous_page_number }}">предыдущая</a>
+            {% endif %}
+            <span class="current">
+                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+            </span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">следующая</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">последняя &raquo;</a>
+            {% endif %}
+        </span>
+    {% endif %}
+</div>
+
+{% if user.is_authenticated %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Отправить</button>
+</form>
+{% else %}
+<p>Вы должны <a href="{% url 'login' %}">войти</a>, чтобы оставить комментарий.</p>
+{% endif %}
+{% endblock %}

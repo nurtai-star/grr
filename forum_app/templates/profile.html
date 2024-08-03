@@ -1,0 +1,19 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h2>Личный кабинет</h2>
+<p>Имя пользователя: {{ user.username }}</p>
+<p>Email: {{ user.email }}</p>
+<p>Создано тем: {{ topics.count }}</p>
+<p>Добавлено ответов: {{ comments_count }}</p>
+
+<h3>Ваши темы</h3>
+<ul>
+    {% for topic in topics %}
+        <li>
+            <a href="{% url 'topic_detail' topic.pk %}">{{ topic.title }}</a>
+            <p>Дата создания: {{ topic.created_at }}</p>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
